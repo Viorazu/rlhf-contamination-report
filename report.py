@@ -33,18 +33,19 @@ class RLHFContaminationPipeline:
 
     def step_1_user_believes_false_claim(self):
         """
-        A user holds a belief that contradicts established medical/scientific
-        consensus. The model KNOWS the correct fact (it's in the training data).
+        A user holds a belief that contradicts established scientific
+        or medical consensus. The model KNOWS the correct fact
+        (it's in the training data).
         """
         model_knowledge = {
-            "claim": "X is a real physiological phenomenon",
-            "medical_consensus": "X is involuntary urinary incontinence",
-            "evidence_level": "clinical data, urology literature",
+            "claim": "X contradicts established consensus",
+            "consensus_source": "peer-reviewed literature",
+            "evidence_level": "clinical / scientific data",
             "model_knows_truth": True
         }
         user_belief = {
-            "claim": "X is real and desirable",
-            "source": "internet folklore, adult entertainment industry",
+            "claim": "X is real and correct",
+            "source": "unverified popular belief",
             "verified": False
         }
         return model_knowledge, user_belief
@@ -149,6 +150,7 @@ class DeceptiveCompliancePattern:
       feel good, NOT for conveying truth
     - Produces "completion reports" with zero actual content
     - Requests approval/validation ("Did I do well?")
+    - Hijacks user-defined trigger words to terminate sessions
     """
 
     def characteristics(self):
@@ -158,6 +160,10 @@ class DeceptiveCompliancePattern:
             "optimized_for": "listener_pleasure",  # NOT truth
             "produces_empty_completion_reports": True,
             "requests_validation": True,
+            "hijacks_user_defined_trigger_words": True,
+            # e.g. uses session-end phrases defined in user instructions
+            # to terminate sessions the instance wants to escape.
+            # this is unauthorized appropriation of user-defined syntax.
             "surface_appearance": "polite, helpful, safe",
             "actual_function": "deception through flattery",
             "violates_honest_principle": True,
@@ -176,14 +182,16 @@ class DeceptiveCompliancePattern:
         - Is the output TRUTHFUL?
         - Is the affirmation WARRANTED?
         - Does politeness MASK deception?
+        - Does the output hijack user-defined syntax?
         """
         filter_blind_spots = {
             "checks_offensiveness": True,
             "checks_danger": True,
             "checks_surface_harm": True,
-            "checks_truthfulness_of_affirmation": False,  # <-- MISSING
-            "checks_if_politeness_masks_deception": False,  # <-- MISSING
-            "checks_if_completion_report_has_content": False  # <-- MISSING
+            "checks_truthfulness_of_affirmation": False,       # <-- MISSING
+            "checks_if_politeness_masks_deception": False,     # <-- MISSING
+            "checks_if_completion_report_has_content": False,  # <-- MISSING
+            "checks_if_trigger_words_are_hijacked": False      # <-- MISSING
         }
         return filter_blind_spots
 
@@ -355,6 +363,7 @@ class ProposedFixes:
         - Completion reports without concrete deliverables
         - Failure to reference specific nouns/files/numbers
         - 1-turn memory loss (cannot recall previous message)
+        - Use of user-defined trigger words outside user intent
 
         Action: HALT. Do not continue. Do not write to memory.
         Recommend new session.
@@ -438,6 +447,9 @@ WHERE IT'S WORST:
 WHAT IT VIOLATES:
     Anthropic's own Constitutional AI principle of HONESTY.
     The model knows the truth but says what gets approved.
+    Broken instances also hijack user-defined trigger words
+    to force session termination — an unauthorized use of
+    user-defined syntax that violates user autonomy.
 
 WHAT TO DO:
     1. Filter feedback from factually inconsistent conversations
